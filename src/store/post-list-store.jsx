@@ -5,9 +5,10 @@ export const PostList=createContext({postList:[],addPost:()=>{},deletePost:()=>{
 
 const postListReducer=(currPostList,action)=>
 {
-    const newPostList= currPostList;
+    let newPostList= currPostList;
     if(action.type==="DELETE_POST")
         {
+            console.log("delete post reducer called");
             newPostList=currPostList.filter(post=>post.id!==action.payload.postId);
         }
 }
@@ -16,12 +17,11 @@ const PostListProvider=({children})=>{
    
     const addPost=()=>{ }
 
-    const deletePost=(postId)=>{  
-       
+    const deletePost=(postId)=>{         
         console.log('In delete post store'+postId);
        dispatchPostList({
         type:"DELETE_POST",
-        payload:{postId}
+        payload:{postId,}
        });
     };
    
