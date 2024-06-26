@@ -1,33 +1,31 @@
  import{createContext,useReducer} from "react"
- 
-
-export const PostList=createContext({postList:[],addPost:()=>{},deletePost:()=>{}});
+ export const PostList=createContext({postList:[],addPost:()=>{},deletePost:()=>{}});
 
 const postListReducer=(currPostList,action)=>
 {
     let newPostList= currPostList;
     if(action.type==="DELETE_POST")
         {
-            console.log("delete post reducer called");
+            console.log("postListReducer called"+newPostList[0].id);
             newPostList=currPostList.filter(post=>post.id!==action.payload.postId);
+            console.log("postListReducer called"+newPostList[0].id);
         }
+        return newPostList;
 }
 const PostListProvider=({children})=>{
-    const {postList,dispatchPostList}=useReducer(postListReducer,DEFAULT_POST_LIST);
-   
+    const [postList,dispatchPostList]=useReducer(postListReducer,DEFAULT_POST_LIST);
     const addPost=()=>{ }
 
     const deletePost=(postId)=>{         
-        console.log('In delete post store'+postId);
        dispatchPostList({
         type:"DELETE_POST",
-        payload:{postId,}
+        payload:{postId,},
        });
     };
    
  
     return(                                 
-    <PostList.Provider value={{postList:DEFAULT_POST_LIST,addPost,deletePost}}>{children}
+    <PostList.Provider value={{postList,addPost,deletePost}}>{children}
     </PostList.Provider>
     );
 }
