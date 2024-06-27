@@ -1,6 +1,6 @@
 const Sidebar=({selected,setSelectedTab})=>{
     return(
-    <div className="d-flex flex-column flex-shrink-0 p-3 text-bg-dark sidebar" style={{width: "280px"}} >
+    <div className="d-flex flex-column flex-shrink-0 p-3 text-bg-dark sidebar" style={{width: "200px"}} >
         <a href="/" className="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
           <svg className="bi pe-none me-2" width="40" height="32"><use xlinkHref="#bootstrap"></use></svg>
           <span className="fs-4">Sidebar</span>
@@ -15,7 +15,6 @@ const Sidebar=({selected,setSelectedTab})=>{
           </li>
           <li  onClick={
             ()=>{
-              console.log("clicked");
               setSelectedTab("CreatePost");}}>
             <a href="#" className={`nav-link text-white ${selected==="CreatePost"&&"active"}`}>
               <svg className="bi pe-none me-2" width="16" height="16"><use xlinkHref="#speedometer2"></use></svg>
