@@ -1,8 +1,9 @@
 import { AiFillDelete } from "react-icons/ai";
+import { BiSolidLike } from "react-icons/bi";
+import { BiSolidDislike } from "react-icons/bi";
 import { useContext } from "react";
 import {PostList} from "../store/post-list-store"
 const Post=({post})=>{
-  //console.log(PostList);
   const {deletePost}=useContext(PostList);
     return (
     <div className="card post-card" style={{width: "30rem"}}>        
@@ -12,8 +13,8 @@ const Post=({post})=>{
           <AiFillDelete /></span></h5>
           <p className="card-text">{post.body}</p>
           {post.tags.map((tag)=>(<span key={tag} className="badge text-bg-primary hashtag">{tag}</span>))}
-          <div className="alert alert-success reactions" role="alert">
-            This post has been reacted by {post.reactions} people.
+          <div className="alert alert-success reactions" role="alert"><BiSolidLike />
+          {post.reactions.likes}    <BiSolidDislike /> {post.reactions.dislikes} .
           </div>
         </div>
       </div>);
