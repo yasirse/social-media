@@ -1,10 +1,10 @@
- import{createContext,useReducer} from "react"
+ import{createContext,useReducer,useState,useEffect} from "react"
  export const PostList=createContext(
     {postList:[],
     addPost:()=>{},
     deletePost:()=>{},
-    addIntialPosts:()=>{},
-});
+    fetching:false,
+    });
 
 const postListReducer=(currPostList,action)=>
 {
@@ -26,18 +26,14 @@ const postListReducer=(currPostList,action)=>
 const PostListProvider=({children})=>
     {
         const [postList,dispatchPostList]=useReducer(postListReducer,[]);
-        const addPost=(userId,postTitle,postBody,reactions,tags)=>
+        const [fetching, setFetching]=useState(false);
+       
+        const addPost=(post)=>
         {
-            console.log(`${userId}  ${postTitle} ${postBody} ${reactions} ${tags} `);
+            console.log("Data after adding to server.",post)
             dispatchPostList({
                 type:"ADD_POST",
-                payload:{
-                    id:Date.now(),
-                    title:postTitle,
-                    body:postBody,
-                    reactions:15,
-                    userId:userId,
-                    tags:tags,},
+                payload:post,                        
                 });
         }
 
@@ -48,19 +44,34 @@ const PostListProvider=({children})=>
                     payload:{posts,},});
             }
 
-        const deletePost=(postId)=>{         
-       dispatchPostList({
-        type:"DELETE_POST",
-        payload:{postId,},
-       });
-    };
-   
+        const deletePost=(postId)=>
+            {         
+                dispatchPostList({
+                    type:"DELETE_POST",
+                    payload:{postId,},
+                                    });
+            };
+            useEffect(()=>
+                {
+                    const controller= new AbortController();
+                    const signal= controller.signal;
+                    setFetching(true);
+                    console.log(" 1 fetch started");
+                    fetch('https://dummyjson.com/posts',{signal})
+                    .then(res => res.json())        
+                    .then((data)=>{
+                    addIntialPosts(data.posts);
+                    setFetching(false);
+                    console.log("2 fetching returned");});
+                    return ()=>{console.log("useEffect cleared"); 
+                    controller.abort() };                   
+                },[]);
  
-    return(                                 
-    <PostList.Provider value={{postList,addPost,deletePost,addIntialPosts}}>{children}
-    </PostList.Provider>
-    );
-}
+        return(                                 
+        <PostList.Provider value={{postList,addPost,deletePost,fetching}}>{children}
+        </PostList.Provider>
+        );
+    }
 const DEFAULT_POST_LIST=[
     {
         id:"1",
